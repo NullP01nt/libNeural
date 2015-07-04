@@ -4,7 +4,7 @@
 
 TEMPLATE = app
 TARGET = Neural
-INCLUDEPATH += . src/Neural
+INCLUDEPATH += . src
 
 QT -= core gui
 CONFIG += c++11

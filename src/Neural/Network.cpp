@@ -1,8 +1,7 @@
-#include "Network.hpp"
+#include <Neural/Network.hpp>
 #include <iostream>
 
 namespace Neural {
-
 double Network::recentAverageSmoothingFactor_ = 100.0;
 
 Network::Network(const std::vector<unsigned> &nettopology) {
@@ -12,5 +11,4 @@ Network::Network(const std::vector<unsigned> &nettopology) {
 		std::cout << "Layer " << l <<":\t" << nettopology[l] << std::endl;
 	}
 }
-
-}; //end_namespace
+}; // end_namespace

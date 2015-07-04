@@ -1,17 +1,16 @@
 #pragma once
-
-#include "Link.hpp"
 #include <vector>
+#include "Link.hpp"
 
 namespace Neural {
-
 class Node {
 public:
-	Node(void);
+	Node();
 
 	unsigned id(void) { return id_; };
 
 	void CalculateOutput(void);
+	void AddInputLink(Link& link);
 
 	double output(void) const { return output_; };
 	void set_output(double out) { output_ = out; };
@@ -28,5 +27,4 @@ private:
 	std::vector<Link> input_links_;
 
 }; // end_class
-
 }; // end_namespace

@@ -1,10 +1,8 @@
 #pragma once
-
 #include <vector>
 #include "Node.hpp"
 
 namespace Neural {
-
 typedef std::vector<Node> Layer;
 
 class Network {
