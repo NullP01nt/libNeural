@@ -1,30 +1,42 @@
 #pragma once
 #include <vector>
-#include "Link.hpp"
+#include <utility>
 
 namespace Neural {
+
 class Node {
 public:
 	Node();
 
-	unsigned id(void) { return id_; };
+	void addInputLink(Node&);
+	void addInputLink(Node&, const double weight);
 
-	void CalculateOutput(void);
-	void AddInputLink(Link& link);
+	void feedForward(void);
+	void adjustWeights(const double currentError);
+	double getIncomingWeight(Node& n);
 
-	double output(void) const { return output_; };
-	void set_output(double out) { output_ = out; };
+	unsigned getID(void) { return id; };
+	double getState(void) const { return state; };
+	void setState(const double newState) { state = newState; };
+	double getError(void) { return error; };
 
 private:
 // Static
 	static double XferFunction(const double x);
 	static double XferFunctionD(const double x);
+
 	static unsigned counter;
 
 // Member
-	unsigned id_;
-	double output_;
-	std::vector<Link> input_links_;
+	unsigned id;
+	double state;
+	double error;
+
+	std::vector<std::pair<Node&, double> > inputs;
+	
+	double getRandomWeight(void);
 
 }; // end_class
+
+
 }; // end_namespace

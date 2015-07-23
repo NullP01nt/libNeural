@@ -16,6 +16,7 @@ public:
 	double recentAverageError(void) const { return recentAverageError_; };
 private:
 	std::vector<Layer> layers_;
+	Neural::Node biasnode_;
 	double error_;
 	double recentAverageError_;
 	static double recentAverageSmoothingFactor_;
