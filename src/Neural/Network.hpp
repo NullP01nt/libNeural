@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include "const.hpp"
 #include "Node.hpp"
 
 namespace Neural {
@@ -22,6 +23,4 @@ private:
 	static double recentAverageSmoothingFactor_;
 }; // end_class
 
-const double eta = 0.15;
-const double alpha = 0.50;
 }; // end_namespace

@@ -1,8 +1,12 @@
 #pragma once
+#include "const.hpp"
 #include <vector>
-#include <utility>
+#include <tuple>
 
 namespace Neural {
+
+class Node;
+typedef std::tuple<Node&, double, double> InputLink;
 
 class Node {
 public:
@@ -32,7 +36,7 @@ private:
 	double state;
 	double error;
 
-	std::vector<std::pair<Node&, double> > inputs;
+	std::vector<InputLink> inputs;
 	
 	double getRandomWeight(void);
 
