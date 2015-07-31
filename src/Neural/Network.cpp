@@ -24,9 +24,27 @@ Network::Network(const std::vector<unsigned> &topology) {
 }
 
 void Network::generateOutput(const std::vector<double> &inputs) {
-	for(unsigned i = 0; i < inputs.size(); i++) {
-		std::cout << inputs[i] << std::endl;
+	if(inputs.size()!=layers_[0].size()) {
+		return;
 	}
-};
+
+	for(unsigned l=0; l < layers_.size(); l++) {
+		if(l==0) {
+			for(unsigned in = 0; in < layers_[0].size(); in++)
+				layers_[0][in].setState(inputs[in]);
+		} else {
+			for(unsigned n = 0; n < layers_[l].size(); n++) {
+				layers_[l][n].feedForward();
+			}
+		}
+	}
+}
+
+void Network::ReadResults(std::vector<double> &outputs) const {
+	outputs.clear();
+	for(unsigned o=0; o < layers_.back().size(); o++) {
+		outputs.push_back(layers_.back()[o].getState());
+	}
+}
 
 }; // end_namespace
