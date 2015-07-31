@@ -17,6 +17,7 @@ void Node::addInputLink(Node& n) {
 
 void Node::addInputLink(Node& n, const double w) {
 	inputs.push_back(InputLink(n, w, 0.0));
+	std::cout << "\t"<<n.getID()<< "\t>>\t" << getID() << std::endl;
 }
 
 void Node::feedForward(void) {
@@ -32,6 +33,9 @@ void Node::feedForward(void) {
 }
 
 void Node::adjustWeights(const double currentError) {
+
+	error = currentError;
+
 	for(unsigned i = 0; i < inputs.size(); i++) {
 		Node& node = std::get<0>(inputs[i]);
 		double weight = std::get<1>(inputs[i]);
@@ -39,6 +43,9 @@ void Node::adjustWeights(const double currentError) {
 
 		double newDeltaWeight = Neural::eta * node.getState() * currentError + Neural::alpha * oldDeltaWeight;
 		weight += newDeltaWeight;
+
+		std::get<1>(inputs[i]) = weight;
+		std::get<2>(inputs[i]) = newDeltaWeight;
 	}
 }
 

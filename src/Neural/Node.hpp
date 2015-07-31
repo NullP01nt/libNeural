@@ -6,7 +6,7 @@
 namespace Neural {
 
 class Node;
-typedef std::tuple<Node&, double, double> InputLink;
+typedef std::tuple<Node&, double, double> InputLink;	// ref, weight, deltaWeight;
 
 class Node {
 public:

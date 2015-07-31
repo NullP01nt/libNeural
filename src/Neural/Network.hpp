@@ -9,8 +9,9 @@ typedef std::vector<Node> Layer;
 class Network {
 public:
 	Network(const std::vector<unsigned> &nettopology);
-	void FeedForward(const std::vector<double> &inputs);
-	void BackPropagate(const std::vector<double> &targets);
+
+	void generateOutput(const std::vector<double> &inputs);
+	void BackProp(const std::vector<double> &targets);
 	void ReadResults(std::vector<double> &outputs) const;
 
 	double error(void) const { return error_; };
