@@ -68,5 +68,10 @@ void Network::ReadResults(std::vector<double> &outputs) const {
 		outputs.push_back(layers_.back()[oIdx].getState());
 	}
 }
+	
+void Network::learnPattern(const std::vector<double> &inputs, const std::vector<double> &targets) {
+	generateOutput(inputs);
+	BackProp(targets);
+}
 
 }; // end_namespace

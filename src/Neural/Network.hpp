@@ -12,6 +12,7 @@ public:
 
 	void generateOutput(const std::vector<double> &inputs);
 	void BackProp(const std::vector<double> &targets);
+	void learnPattern(const std::vector<double> &inputs, const std::vector<double> &targets);
 	void ReadResults(std::vector<double> &outputs) const;
 
 	double error(void) const { return error_; };
