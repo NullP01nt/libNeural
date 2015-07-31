@@ -10,7 +10,8 @@ QT -= core gui
 CONFIG += c++11
 
 # Input
-HEADERS += src/Neural/Network.hpp src/Neural/Node.hpp
+HEADERS += src/Neural/Network.hpp src/Neural/Node.hpp src/TrainingData.hpp
 SOURCES += src/main.cpp \
            src/Neural/Network.cpp \
-           src/Neural/Node.cpp
+           src/Neural/Node.cpp \
+		   src/TrainingData.cpp

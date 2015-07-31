@@ -40,19 +40,18 @@ void Network::generateOutput(const std::vector<double> &inputs) {
 
 void Network::BackProp(const std::vector<double> &outputs) {
 
-	assert(outputs.size()==layers_[layers.size()-1].size());
+	assert(outputs.size()==layers_[layers_.size()-1].size());
 
 	for(unsigned lIdx=(layers_.size()-1); lIdx>0; lIdx--) {
-		std::cout << "Iter " << lIdx << std::endl;
 		for(unsigned nIdx=0; nIdx < layers_[lIdx].size(); nIdx++) {
 			double state = layers_[lIdx][nIdx].getState();
 			double error;
 
 			if(lIdx==(layers_.size()-1)) {
-				error = state * (1.0-state) * (layers_[lIdx][nIdx]-state);
+				error = state * (1.0-state) * (outputs[nIdx]-state);
 			} else {
 				double sum = 0.0;
-				for(nIx=0; nIx < layers_[lIdx+1].size(); nIx++) {
+				for(unsigned nIx=0; nIx < layers_[lIdx+1].size(); nIx++) {
 					sum+= layers_[lIdx+1][nIx].getIncomingWeight(layers_[lIdx][nIdx]) * layers_[lIdx+1][nIx].getError();
 				}
 				error = state * (1.0-state) * sum;
@@ -63,7 +62,8 @@ void Network::BackProp(const std::vector<double> &outputs) {
 }
 
 void Network::ReadResults(std::vector<double> &outputs) const {
-	outputs.clear();
+	if(outputs.size()>0)
+		outputs.clear();
 	for(unsigned oIdx=0; oIdx < layers_.back().size(); oIdx++) {
 		outputs.push_back(layers_.back()[oIdx].getState());
 	}
