@@ -21,6 +21,8 @@ void TrainingData::getTopology(std::vector<unsigned> &topo) {
 }
 
 unsigned TrainingData::getNextInputs( std::vector<double> &in) {
+	in.clear();
+
 	std::string line, label;
 	getline(dataFile, line);
 	std::stringstream ss(line);
@@ -38,6 +40,8 @@ unsigned TrainingData::getNextInputs( std::vector<double> &in) {
 }
 
 unsigned TrainingData::getNextTargets( std::vector<double> &tgt) {
+	tgt.clear();
+
 	std::string line, label;
 	getline(dataFile, line);
 	std::stringstream ss(line);

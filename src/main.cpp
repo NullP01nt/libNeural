@@ -14,7 +14,7 @@ void printVector(const std::string pref, const std::vector<double> &data) {
 }
 
 int main(void) {
-	TrainingData td("/tmp/trainingData.txt");
+	TrainingData td("trainingData.txt");
 	std::vector<unsigned> topo;
 	td.getTopology(topo);
 
@@ -22,15 +22,19 @@ int main(void) {
 
 	std::vector<double> inputs, targets, outputs;
 	unsigned trainingPass = 0;
+	unsigned numIn, numTgt;
 
 	while(!td.isEOF()) {
 		++trainingPass;
 		std::cout << std::endl << "Pass " << trainingPass << std::endl;
 
-		if(td.getNextInputs(inputs) != topo[0])
+		numIn = td.getNextInputs(inputs);
+		numTgt = td.getNextTargets(targets);
+
+		if(numIn != topo[0])
 			break;
 
-		if(td.getNextTargets(targets) != topo.back())
+		if(numTgt != topo.back())
 			break;
 
 		printVector("Inputs", inputs);
