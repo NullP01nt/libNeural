@@ -1,5 +1,6 @@
 #include <Neural/Network.hpp>
 #include <iostream>
+#include <cassert>
 
 namespace Neural {
 double Network::recentAverageSmoothingFactor_ = 100.0;
@@ -24,16 +25,13 @@ Network::Network(const std::vector<unsigned> &topology) {
 }
 
 void Network::generateOutput(const std::vector<double> &inputs) {
-	if(inputs.size()!=layers_[0].size()) {
-		return;
-	}
+	assert(inputs.size()==layers_[0].size());
 
 	for(unsigned l=0; l < layers_.size(); l++) {
-		if(l==0) {
-			for(unsigned in = 0; in < layers_[0].size(); in++)
-				layers_[0][in].setState(inputs[in]);
-		} else {
-			for(unsigned n = 0; n < layers_[l].size(); n++) {
+		for(unsigned n = 0; n < layers_[l].size(); n++) {
+			if(l==0) {
+				layers_[l][n].setState(inputs[n]);
+			} else {
 				layers_[l][n].feedForward();
 			}
 		}
