@@ -37,7 +37,7 @@ private:
 	double error;
 
 	std::vector<InputLink> inputs;
-	
+
 	double getRandomWeight(void);
 
 }; // end_class

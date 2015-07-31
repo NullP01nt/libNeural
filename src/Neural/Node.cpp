@@ -33,19 +33,20 @@ void Node::feedForward(void) {
 }
 
 void Node::adjustWeights(const double currentError) {
-
-	error = currentError;
+	std::cout << "Node::adjustWeights("<<currentError<<");"<<std::endl;
 
 	for(unsigned i = 0; i < inputs.size(); i++) {
 		Node& node = std::get<0>(inputs[i]);
 		double weight = std::get<1>(inputs[i]);
 		double oldDeltaWeight = std::get<2>(inputs[i]);
 
-		double newDeltaWeight = Neural::eta * node.getState() * currentError + Neural::alpha * oldDeltaWeight;
+		//double newDeltaWeight = Neural::eta * node.getState() * currentError + Neural::alpha * oldDeltaWeight;
+		double newDeltaWeight = Neural::eta * currentError * node.getState();
 		weight += newDeltaWeight;
 
 		std::get<1>(inputs[i]) = weight;
 		std::get<2>(inputs[i]) = newDeltaWeight;
+		error = currentError;
 	}
 }
 
