@@ -12,7 +12,10 @@ class Network {
 public:
 	Network(void);
 	Network(const std::vector<unsigned> &topology);
-	void feedForward(const std::vector<double> &inputs);
+
+        void setTopology(const std::vector<unsigned> &topology);
+
+        void feedForward(const std::vector<double> &inputs);
 	void backProp(const std::vector<double> &targets);
 	void getResults(std::vector<double> &results) const;
 
@@ -23,7 +26,9 @@ private:
 	Node	m_biasnode;
 	double	m_error;
 	double	m_recentAvgError;
-	static	double m_recentAvgSmoothFactor;
+    static	double m_recentAvgSmoothFactor;
+
+        void buildNetwork(const std::vector<unsigned> &topo);
 };
 
-};
+}

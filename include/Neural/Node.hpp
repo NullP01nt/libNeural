@@ -41,4 +41,4 @@ private:
 	std::vector<InputLink> m_inputs;
 };
 
-};
+}
