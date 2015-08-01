@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Node.hpp"
 #include <vector>
+
+#include <NeuralNode.hpp>
 
 namespace Neural {
 

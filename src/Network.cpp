@@ -1,9 +1,9 @@
-#include "Network.hpp"
-#include "Node.hpp"
-
 #include <iostream>
 #include <cassert>
 #include <cmath>
+
+#include <NeuralNetwork.hpp>
+#include <NeuralNode.hpp>
 
 namespace Neural {
 

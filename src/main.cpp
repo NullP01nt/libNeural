@@ -1,9 +1,10 @@
 #include <iostream>
-#include "Neural/Network.hpp"
-#include "Neural/Node.hpp"
-#include "TrainingData.hpp"
 #include <string>
 #include <cassert>
+
+#include <NeuralNetwork.hpp>
+#include <NeuralNode.hpp>
+#include <TrainingData.hpp>
 
 
 void printVector(const std::string pref, const std::vector<double> &data) {

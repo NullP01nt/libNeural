@@ -1,7 +1,8 @@
 #pragma once
-#include "const.hpp"
 #include <vector>
 #include <tuple>
+
+#include <NeuralConst.hpp>
 
 namespace Neural {
 
