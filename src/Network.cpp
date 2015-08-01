@@ -7,6 +7,10 @@
 
 namespace Neural {
 
+Network::Network(void) {
+	m_biasnode.setOutput(1.0);
+}
+
 Network::Network(const std::vector<unsigned> &topo) {
 	m_biasnode.setOutput(1.0);
 

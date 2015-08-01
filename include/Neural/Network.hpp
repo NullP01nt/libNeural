@@ -10,6 +10,7 @@ typedef std::vector<Node> Layer;
 
 class Network {
 public:
+	Network(void);
 	Network(const std::vector<unsigned> &topology);
 	void feedForward(const std::vector<double> &inputs);
 	void backProp(const std::vector<double> &targets);
