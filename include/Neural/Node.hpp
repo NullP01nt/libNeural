@@ -2,7 +2,7 @@
 #include <vector>
 #include <tuple>
 
-#include <NeuralConst.hpp>
+#include <Neural/const.hpp>
 
 namespace Neural {
 

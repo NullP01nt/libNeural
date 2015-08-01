@@ -2,7 +2,7 @@
 #include <iostream>
 #include <cmath>
 
-#include <NeuralNode.hpp>
+#include <Neural/Node.hpp>
 
 namespace Neural {
 

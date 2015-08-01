@@ -2,8 +2,8 @@
 #include <string>
 #include <cassert>
 
-#include <NeuralNetwork.hpp>
-#include <NeuralNode.hpp>
+#include <Neural/Network.hpp>
+#include <Neural/Node.hpp>
 #include <TrainingData.hpp>
 
 

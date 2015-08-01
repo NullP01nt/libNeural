@@ -27,7 +27,8 @@ SOURCES += \
 	src/TrainingData.cpp
 
 HEADERS += \
-	include/NeuralConst.hpp \
-	include/NeuralNetwork.hpp \
-	include/NeuralNode.hpp \
+	include/Neural.hpp \
+	include/Neural/const.hpp \
+	include/Neural/Network.hpp \
+	include/Neural/Node.hpp \
 	include/TrainingData.hpp

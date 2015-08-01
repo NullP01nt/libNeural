@@ -2,8 +2,8 @@
 #include <cassert>
 #include <cmath>
 
-#include <NeuralNetwork.hpp>
-#include <NeuralNode.hpp>
+#include <Neural/Network.hpp>
+#include <Neural/Node.hpp>
 
 namespace Neural {
 
