@@ -1,28 +1,27 @@
 #pragma once
-#include <vector>
-#include "const.hpp"
+
 #include "Node.hpp"
+#include <vector>
 
 namespace Neural {
+
 typedef std::vector<Node> Layer;
 
 class Network {
 public:
-	Network(const std::vector<unsigned> &nettopology);
+	Network(const std::vector<unsigned> &topology);
+	void feedForward(const std::vector<double> &inputs);
+	void backProp(const std::vector<double> &targets);
+	void getResults(std::vector<double> &results) const;
 
-	void generateOutput(const std::vector<double> &inputs);
-	void BackProp(const std::vector<double> &targets);
-	void learnPattern(const std::vector<double> &inputs, const std::vector<double> &targets);
-	void ReadResults(std::vector<double> &outputs) const;
+	double getRecentAvgError(void) const { return m_recentAvgError; }
 
-	double error(void) const { return error_; };
-	double recentAverageError(void) const { return recentAverageError_; };
 private:
-	std::vector<Layer> layers_;
-	Neural::Node biasnode_;
-	double error_;
-	double recentAverageError_;
-	static double recentAverageSmoothingFactor_;
-}; // end_class
+	std::vector<Layer> m_layers;
+	Node	m_biasnode;
+	double	m_error;
+	double	m_recentAvgError;
+	static	double m_recentAvgSmoothFactor;
+};
 
-}; // end_namespace
+};

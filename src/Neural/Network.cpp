@@ -1,77 +1,102 @@
-#include <Neural/Network.hpp>
+#include "Network.hpp"
+#include "Node.hpp"
+
 #include <iostream>
 #include <cassert>
+#include <cmath>
 
 namespace Neural {
-double Network::recentAverageSmoothingFactor_ = 100.0;
 
-Network::Network(const std::vector<unsigned> &topology) {
-	unsigned num_layers = topology.size();
-	biasnode_.setState(1.0);
-	for(unsigned lIdx = 0; lIdx<num_layers; lIdx++) {
-		layers_.push_back(Layer());
+Network::Network(const std::vector<unsigned> &topo) {
+	m_biasnode.setOutput(1.0);
 
-		for(unsigned n = 0; n < topology[lIdx]; n++) {
-			layers_[lIdx].push_back(Node());
-			std::cout << "[" << lIdx << ":" << layers_[lIdx][n].getID() << "]" << std::endl;
-			if(lIdx>=1) {
-				for(unsigned np=0; np < layers_[lIdx-1].size(); np++) {
-					layers_[lIdx][n].addInputLink(layers_[lIdx-1][np]);
+	unsigned numLayers = topo.size();
+	for(unsigned lIdx = 0; lIdx < numLayers; lIdx++) {
+		m_layers.push_back(Layer());
+		unsigned numNodes = topo[lIdx];
+		for(unsigned nIdx = 0; nIdx < numNodes; nIdx++) {
+			m_layers[lIdx].push_back(Node());
+			std::cout << "["<<lIdx<<":"<<m_layers[lIdx].back().getID()<<"]" << std::endl;
+			if(lIdx>0) {
+				unsigned numNodesPrev = topo[lIdx-1];
+				for(unsigned pnIdx = 0; pnIdx < numNodesPrev; pnIdx++) {
+					m_layers[lIdx][nIdx].addInputLink(m_layers[lIdx-1][pnIdx]);
 				}
-				layers_[lIdx][n].addInputLink(biasnode_);
+				m_layers[lIdx][nIdx].addInputLink(m_biasnode);
 			}
 		}
 	}
 }
 
-void Network::generateOutput(const std::vector<double> &inputs) {
-	assert(inputs.size()==layers_[0].size());
+void Network::feedForward(const std::vector<double> &inputs) {
+	assert(inputs.size()==m_layers[0].size());
 
-	for(unsigned lIdx=0; lIdx < layers_.size(); lIdx++) {
-		for(unsigned n = 0; n < layers_[lIdx].size(); n++) {
+	for(unsigned lIdx=0; lIdx < m_layers.size(); lIdx++) {
+		for(unsigned nIdx=0; nIdx < m_layers[lIdx].size(); nIdx++) {
 			if(lIdx==0) {
-				layers_[lIdx][n].setState(inputs[n]);
+				m_layers[lIdx][nIdx].setOutput(inputs[nIdx]);
 			} else {
-				layers_[lIdx][n].feedForward();
+				m_layers[lIdx][nIdx].feedForward();
 			}
 		}
 	}
 }
 
-void Network::BackProp(const std::vector<double> &outputs) {
-
-	assert(outputs.size()==layers_[layers_.size()-1].size());
-
-	for(unsigned lIdx=(layers_.size()-1); lIdx>0; lIdx--) {
-		for(unsigned nIdx=0; nIdx < layers_[lIdx].size(); nIdx++) {
-			double state = layers_[lIdx][nIdx].getState();
-			double error;
-
-			if(lIdx==(layers_.size()-1)) {
-				error = state * (1.0-state) * (outputs[nIdx]-state);
-			} else {
-				double sum = 0.0;
-				for(unsigned nIx=0; nIx < layers_[lIdx+1].size(); nIx++) {
-					sum+= layers_[lIdx+1][nIx].getIncomingWeight(layers_[lIdx][nIdx]) * layers_[lIdx+1][nIx].getError();
-				}
-				error = state * (1.0-state) * sum;
-			}
-			layers_[lIdx][nIdx].adjustWeights(error);
-		}
-	}
-}
-
-void Network::ReadResults(std::vector<double> &outputs) const {
-	if(outputs.size()>0)
-		outputs.clear();
-	for(unsigned oIdx=0; oIdx < layers_.back().size(); oIdx++) {
-		outputs.push_back(layers_.back()[oIdx].getState());
-	}
-}
+void Network::backProp(const std::vector<double> &targets) {
+	Layer &outputLayer = m_layers.back();
 	
-void Network::learnPattern(const std::vector<double> &inputs, const std::vector<double> &targets) {
-	generateOutput(inputs);
-	BackProp(targets);
+	assert(targets.size()==outputLayer.size());
+	m_error = 0.0;
+
+	// Calculate overall net error (RMS of output neuron errors)
+	for(unsigned nIdx = 0; nIdx < outputLayer.size(); nIdx++) {
+		double delta = targets[nIdx] - outputLayer[nIdx].getOutput();
+		m_error += delta*delta; // sum error squares
+	}
+	m_error /= outputLayer.size(); // average
+	m_error = sqrt(m_error); // RMS
+
+	// Implement a recent average measurement
+	m_recentAvgError = (m_recentAvgError * m_recentAvgSmoothFactor + m_error) / (m_recentAvgSmoothFactor+1.0);
+
+	// Calculate output layer gradients
+	for(unsigned nIdx = 0; nIdx < outputLayer.size(); nIdx++) {
+		double delta = targets[nIdx] - outputLayer[nIdx].getOutput();
+		double gradient = delta * Node::XferFunctionD(outputLayer[nIdx].getOutput());
+		outputLayer[nIdx].setGradient(gradient);
+	}
+
+	// Calculate hidden layer gradients
+	for(unsigned lIdx = m_layers.size() - 2; lIdx > 0; lIdx--) {
+		Layer &currentLayer = m_layers[lIdx];
+		Layer &nextLayer = m_layers[lIdx+1];
+
+		for(unsigned nIdx = 0; nIdx < currentLayer.size(); nIdx++) {
+			double sum = 0.0;
+			for(unsigned idx=0; idx < nextLayer.size(); idx++) {
+				sum += nextLayer[idx].getInputWeight(currentLayer[nIdx]) * nextLayer[idx].getGradient();
+			}
+			double gradient = sum * Node::XferFunctionD(currentLayer[nIdx].getOutput());
+			currentLayer[nIdx].setGradient(gradient);
+		}
+	}
+
+	// Update link weights
+	for(unsigned lIdx=m_layers.size()-1; lIdx > 0; lIdx--) {
+		for(unsigned nIdx=0; nIdx < m_layers[lIdx].size(); nIdx++) {
+			m_layers[lIdx][nIdx].updateInputWeights();
+		}
+	}
+
 }
 
-}; // end_namespace
+void Network::getResults(std::vector<double> &results) const {
+	results.clear();
+
+	for(unsigned nIdx=0; nIdx < m_layers.back().size(); nIdx++) {
+		results.push_back(m_layers.back()[nIdx].getOutput());
+	}
+}
+
+double Network::m_recentAvgSmoothFactor = 100.0;
+};

@@ -6,41 +6,38 @@
 namespace Neural {
 
 class Node;
-typedef std::tuple<Node&, double, double> InputLink;	// ref, weight, deltaWeight;
+typedef std::tuple<Node&, double, double> InputLink;	// ref, weight, deltaWeight
 
 class Node {
 public:
-	Node();
+	Node(void);
 
 	void addInputLink(Node&);
-	void addInputLink(Node&, const double weight);
 
 	void feedForward(void);
-	void adjustWeights(const double currentError);
-	double getIncomingWeight(Node& n);
 
-	unsigned getID(void) { return id; };
-	double getState(void) const { return state; };
-	void setState(const double newState) { state = newState; };
-	double getError(void) { return error; };
+	unsigned	getID(void) const { return m_id; }
+	double		getOutput(void) const { return m_output; }
+	void		setOutput(const double newOut) { m_output = newOut; }
 
-private:
-// Static
+	double	getGradient(void) const { return m_gradient; }
+	void	setGradient(const double grad) { m_gradient = grad; }
+
+	double getInputWeight(const Node& n) const;
+	void updateInputWeights(void);
+
 	static double XferFunction(const double x);
 	static double XferFunctionD(const double x);
 
+private:
+	double getRandomWeight(void);
 	static unsigned counter;
 
-// Member
-	unsigned id;
-	double state;
-	double error;
+	unsigned m_id;
+	double m_output;
+	double m_gradient;
 
-	std::vector<InputLink> inputs;
+	std::vector<InputLink> m_inputs;
+};
 
-	double getRandomWeight(void);
-
-}; // end_class
-
-
-}; // end_namespace
+};
