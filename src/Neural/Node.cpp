@@ -11,7 +11,7 @@ Node::Node(void) : m_id(counter++) {
 
 void Node::addInputLink(Node& n) {
 	m_inputs.push_back(InputLink(n, getRandomWeight(), 0.0));
-	std::cout << "\t" << n.getID() << "\t>>\t" << getID() << std::endl;
+//	std::cout << "\t" << n.getID() << "\t>>\t" << getID() << std::endl;
 }
 
 void Node::feedForward(void) {

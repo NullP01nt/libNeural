@@ -16,7 +16,7 @@ Network::Network(const std::vector<unsigned> &topo) {
 		unsigned numNodes = topo[lIdx];
 		for(unsigned nIdx = 0; nIdx < numNodes; nIdx++) {
 			m_layers[lIdx].push_back(Node());
-			std::cout << "["<<lIdx<<":"<<m_layers[lIdx].back().getID()<<"]" << std::endl;
+//			std::cout << "["<<lIdx<<":"<<m_layers[lIdx].back().getID()<<"]" << std::endl;
 			if(lIdx>0) {
 				unsigned numNodesPrev = topo[lIdx-1];
 				for(unsigned pnIdx = 0; pnIdx < numNodesPrev; pnIdx++) {
