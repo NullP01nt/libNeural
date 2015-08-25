@@ -1,7 +1,8 @@
-#include "Node.hpp"
 #include <random>
 #include <iostream>
 #include <cmath>
+
+#include <Neural/Node.hpp>
 
 namespace Neural {
 

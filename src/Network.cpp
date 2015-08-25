@@ -1,31 +1,42 @@
-#include "Network.hpp"
-#include "Node.hpp"
-
 #include <iostream>
 #include <cassert>
 #include <cmath>
 
+#include <Neural/Network.hpp>
+#include <Neural/Node.hpp>
+
 namespace Neural {
+
+Network::Network(void) {
+	m_biasnode.setOutput(1.0);
+}
 
 Network::Network(const std::vector<unsigned> &topo) {
 	m_biasnode.setOutput(1.0);
+    buildNetwork(topo);
+}
 
-	unsigned numLayers = topo.size();
-	for(unsigned lIdx = 0; lIdx < numLayers; lIdx++) {
-		m_layers.push_back(Layer());
-		unsigned numNodes = topo[lIdx];
-		for(unsigned nIdx = 0; nIdx < numNodes; nIdx++) {
-			m_layers[lIdx].push_back(Node());
-//			std::cout << "["<<lIdx<<":"<<m_layers[lIdx].back().getID()<<"]" << std::endl;
-			if(lIdx>0) {
-				unsigned numNodesPrev = topo[lIdx-1];
-				for(unsigned pnIdx = 0; pnIdx < numNodesPrev; pnIdx++) {
-					m_layers[lIdx][nIdx].addInputLink(m_layers[lIdx-1][pnIdx]);
-				}
-				m_layers[lIdx][nIdx].addInputLink(m_biasnode);
-			}
-		}
-	}
+void Network::setTopology(const std::vector<unsigned> &topology) {
+    buildNetwork(topology);
+}
+
+void Network::buildNetwork(const std::vector<unsigned> &topo) {
+    unsigned numLayers = topo.size();
+    for(unsigned lIdx = 0; lIdx < numLayers; lIdx++) {
+        m_layers.push_back(Layer());
+        unsigned numNodes = topo[lIdx];
+        for(unsigned nIdx = 0; nIdx < numNodes; nIdx++) {
+            m_layers[lIdx].push_back(Node());
+//            std::cout << "["<<lIdx<<":"<<m_layers[lIdx].back().getID()<<"]" << std::endl;
+            if(lIdx>0) {
+                unsigned numNodesPrev = topo[lIdx-1];
+                for(unsigned pnIdx = 0; pnIdx < numNodesPrev; pnIdx++) {
+                    m_layers[lIdx][nIdx].addInputLink(m_layers[lIdx-1][pnIdx]);
+                }
+                m_layers[lIdx][nIdx].addInputLink(m_biasnode);
+            }
+        }
+    }
 }
 
 void Network::feedForward(const std::vector<double> &inputs) {

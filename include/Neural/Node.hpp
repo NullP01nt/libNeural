@@ -1,7 +1,8 @@
 #pragma once
-#include "const.hpp"
 #include <vector>
 #include <tuple>
+
+#include <Neural/const.hpp>
 
 namespace Neural {
 
@@ -40,4 +41,4 @@ private:
 	std::vector<InputLink> m_inputs;
 };
 
-};
+}
