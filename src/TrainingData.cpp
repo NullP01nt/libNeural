@@ -28,7 +28,8 @@ unsigned TrainingData::getNextInputs( std::vector<double> &in) {
 	std::stringstream ss(line);
 	ss >> label;
 	if(isEOF() || label.compare("i:") != 0) {
-		abort();
+		return 0;
+//		abort();
 	}
 
 	while(!ss.eof()) {

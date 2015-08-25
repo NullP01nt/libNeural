@@ -2,18 +2,57 @@
 
 import random
 
-def XORGenerator():
-    with open("/tmp/trainingData.txt","w") as f:
-        f.write("topo: 2 4 1\n")
-        for i in range(2000):
-            n1 = int(random.getrandbits(1))
-            n2 = int(random.getrandbits(1))
-            t = float(n1^n2)
-            instr = 'i: '+str(float(n1))+" "+str(float(n2))+'\n'
-            outstr = 'o: '+str(t)+'\n'
-            f.write(instr)
-            f.write(outstr)
-        f.close()
+class TrainingSampleGenerator():
+    def __init__(self):
+        pass
+    def process(self,topology, numsamples, func,fname):
+        with open(fname,"w") as sf:
+            sf.write("topo: "+" ".join( [ str(x) for x in topology ] )+"\n")
+            numinputs=topology[0]
+            for i in range(numsamples):
+                inputs=[]
+                outputs=[]
+                for j in range(numinputs):
+                    inputs.append(int(random.getrandbits(1)))
+                outputs = func(inputs)
+                instr = "i: "+" ".join([ str(x) for x in inputs ])+"\n"
+                outstr = "o: "+" ".join([ str(x) for x in outputs ])+"\n"
+                sf.write(instr)
+                sf.write(outstr)
+            sf.close()
+
+def bool_and(inputs):
+    return [ float(inputs[0]&inputs[1]) ]
+
+def bool_or(inputs):
+    return [ float(inputs[0]|inputs[1]) ]
+
+def bool_nand(inputs):
+    return [ float( not inputs[0]&inputs[1] ) ]
+
+def bool_nor(inputs):
+    return [ float(not inputs[0]|inputs[1]) ]
+
+def bool_xor(inputs):
+    return [ float(inputs[0]^inputs[1]) ]
+
+def bool_xnor(inputs):
+    return [ float(not inputs[0]^inputs[1]) ]
+
+def printtable(head,func):
+    print "---"+head+"---\n"
+    for A in range(2):
+        for B in range(2):
+            print str(A)+"\t"+str(B)+"\t"+str(func( [A,B] )[0])+"\n"
+    print "\n\n"
 
 if __name__=="__main__":
-    XORGenerator()
+    topo=[2,4,1]
+    smps=2000
+    tsg = TrainingSampleGenerator()
+    tsg.process(topo,smps,bool_and,"DS_AND.txt")
+    tsg.process(topo,smps,bool_or,"DS_OR.txt")
+    tsg.process(topo,smps,bool_nand,"DS_NAND.txt")
+    tsg.process(topo,smps,bool_nor,"DS_NOR.txt")
+    tsg.process(topo,smps,bool_xor,"DS_XOR.txt")
+    tsg.process(topo,smps,bool_xnor,"DS_XNOR.txt")
