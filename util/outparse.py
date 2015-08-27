@@ -11,7 +11,6 @@ for l in f:
     else:
         lines[pnr-1]+=";"+dat[1]
 f.close()
-print lines
 
 of=open("errors.csv","w+")
 for i in range(len(lines)):
